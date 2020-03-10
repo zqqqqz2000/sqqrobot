@@ -1,18 +1,24 @@
 # SQQRobot
 
-sqqrobot is an qq(Tencent qq) robot python api, based on [CQA](https://cqp.cc/) and its plugin [CQSocket](https://github.com/yukixz/cqsocketapi), CQSocket has been attached in project root `org.dazzyd.cqsocketapi.cpk`.
+sqqrobot is a qq(Tencent qq) robot python api, based on [CQA](https://cqp.cc/) and its plugin [CQSocket](https://github.com/yukixz/cqsocketapi), CQSocket has been attached in project root `org.dazzyd.cqsocketapi.cpk`.
 
 ## Usage
+
+First, import SQQRobot
+
+```python
+from sqqrobot.qqbot import QQbot
+```
 
 User can define his own message handler function easily by using **decorator**```@QQbot.as_pipe```
 
 ```python
-@bot.as_pipe
+@QQbot.as_pipe
 def handler(message: QQbot.Message) -> Optional[QQbot.Message]:
     ...
 ```
 
-To handle different message type, sqqrobot assembled five type. It will be taken as argument `message` of the handler function.
+To handle different message type, sqqrobot assembled five types in ```sqqrobot.qqbot```. It will be taken as argument `message` of the handler function.
 
 ```python
 class PrivateMessage(Message):
@@ -52,10 +58,12 @@ from sqqrobot.qqbot import QQbot
 from sqqrobot import qqbot
 from typing import *
 
-bot = QQbot(23333, 11235)
+# serve port is the port this service will listening
+# the qsocket port is the listening port of CQSocket, default is 11235
+bot = QQbot(serve_port=23333, qsocket_port=11235)
 
 
-@bot.as_pipe
+@QQbot.as_pipe
 def private_handler(message: qqbot.PrivateMessage) -> Optional[qqbot.Message]:
     if not isinstance(message, qqbot.PrivateMessage):
         return message
@@ -65,7 +73,7 @@ def private_handler(message: qqbot.PrivateMessage) -> Optional[qqbot.Message]:
     bot.send_message(message_back)
 
 
-@bot.as_pipe
+@QQbot.as_pipe
 def group_handler(message: qqbot.GroupMessage) -> Optional[qqbot.Message]:
     if not isinstance(message, qqbot.GroupMessage):
         return message
@@ -75,6 +83,7 @@ def group_handler(message: qqbot.GroupMessage) -> Optional[qqbot.Message]:
 
 
 if __name__ == '__main__':
+    # please execute bot.serve() only after loaded all the handler function you defined.
     bot.serve()
 ```
 

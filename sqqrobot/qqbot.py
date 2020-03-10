@@ -31,7 +31,8 @@ class QQbot:
             skt.close()
             time.sleep(30)
 
-    def as_pipe(self, pipe_func: Callable):
+    @staticmethod
+    def as_pipe(pipe_func: Callable):
         global_var.pipe.add_handler(pipe_func)
 
     def serve(self):
